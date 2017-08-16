@@ -138,7 +138,15 @@
 {
     NSString *groupId = payload.groupId;
     if (groupId) {
-        [self.amplitude setGroup:@"[Segment] Group" groupName:groupId];
+        NSDictionary *traits = payload.traits;
+        NSString *groupType = @"[Segment] Group";
+        if (traits) {
+            id traitGroupType = [traits objectForKey:@"groupType"];
+            if (traitGroupType && [traitGroupType isKindOfClass:[NSString class]]) {
+                groupType = (NSString *)traitGroupType;
+            }
+        }
+        [self.amplitude setGroup:groupType groupName:groupId];
     }
 }
 
